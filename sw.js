@@ -1,10 +1,11 @@
-const CACHE = 'dulce-library-v1';
+const CACHE = 'dulce-library-v2';
+const BASE = '/D-Library';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  BASE + '/',
+  BASE + '/index.html',
+  BASE + '/manifest.json',
+  BASE + '/icon-192.png',
+  BASE + '/icon-512.png'
 ];
 
 self.addEventListener('install', e => {
@@ -22,11 +23,9 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Network first for CDN resources, cache first for local
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) {
-    // External (fonts, CDN) — network only
-    return;
+    return; // External (fonts, CDN) — don't intercept
   }
   e.respondWith(
     caches.match(e.request).then(cached => {
