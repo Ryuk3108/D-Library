@@ -18,7 +18,7 @@
 :root{
   --deep:#0D0618;--plum:#1A0830;--violet:#5C2D8A;--lilac:#C8A8E8;
   --blush:#F0B8D0;--rose:#D88AAA;--mauve:#B878C0;--parch:#F3E2C4;--ink:#251006;
-  --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,32px);--safe-bot:env(safe-area-inset-bottom,0px);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{height:100%;height:-webkit-fill-available;}
@@ -390,7 +390,20 @@ body.night .parchment-page{background-color:#E8C99A;filter:brightness(0.78) sepi
 </div>
 
 <script>
-// ══ STARS ══
+// ══ SAFE AREA FIX — ensure status bar is always cleared ══
+(function(){
+  // Read actual env value; if it's 0 or missing, use a sensible default
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;top:env(safe-area-inset-top,0px);left:0;width:1px;height:1px;';
+  document.body.appendChild(el);
+  const top=el.getBoundingClientRect().top;
+  document.body.removeChild(el);
+  // If top is 0 or very small, force a minimum based on window.screen
+  const statusBarH=top>4?top:Math.max(32,window.screen.height-window.screen.availHeight)||32;
+  if(top<4){
+    document.documentElement.style.setProperty('--safe-top', statusBarH+'px');
+  }
+})();
 (function(){const f=document.createDocumentFragment();for(let i=0;i<80;i++){const s=document.createElement('div');s.className='star';const z=Math.random()>0.7?2.5:1.5;s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${z}px;height:${z}px;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*6}s;`;f.appendChild(s);}document.getElementById('stars-container').appendChild(f);})();
 
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
