@@ -18,6 +18,7 @@
 :root{
   --deep:#0D0618;--plum:#1A0830;--violet:#5C2D8A;--lilac:#C8A8E8;
   --blush:#F0B8D0;--rose:#D88AAA;--mauve:#B878C0;--parch:#F3E2C4;--ink:#251006;
+  --orb1-bg:rgba(92,45,138,0.22);--orb2-bg:rgba(216,138,170,0.16);--orb3-bg:rgba(139,92,200,0.13);
   --safe-top:env(safe-area-inset-top,32px);--safe-bot:env(safe-area-inset-bottom,0px);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -38,9 +39,9 @@ img{display:block;}
 .app-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 90% 70% at 15% 30%,rgba(92,45,138,0.22) 0%,transparent 65%),radial-gradient(ellipse 70% 80% at 85% 70%,rgba(216,138,170,0.10) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 50% 90%,rgba(92,45,138,0.15) 0%,transparent 60%),var(--deep);transform:translateZ(0);}
 .orb{position:absolute;border-radius:50%;will-change:transform;}
 .orb::after{content:'';position:absolute;inset:-30px;border-radius:50%;filter:blur(55px);background:inherit;}
-.orb1{width:260px;height:260px;background:rgba(92,45,138,0.22);top:5%;left:-5%;animation:floatA 11s ease-in-out infinite;}
-.orb2{width:180px;height:180px;background:rgba(216,138,170,0.16);bottom:15%;right:-5%;animation:floatB 13s ease-in-out infinite;}
-.orb3{width:200px;height:200px;background:rgba(139,92,200,0.13);top:50%;left:30%;animation:floatC 9s ease-in-out infinite;}
+.orb1{width:260px;height:260px;background:var(--orb1-bg);top:5%;left:-5%;animation:floatA 11s ease-in-out infinite;}
+.orb2{width:180px;height:180px;background:var(--orb2-bg);bottom:15%;right:-5%;animation:floatB 13s ease-in-out infinite;}
+.orb3{width:200px;height:200px;background:var(--orb3-bg);top:50%;left:30%;animation:floatC 9s ease-in-out infinite;}
 @keyframes floatA{0%,100%{transform:translate3d(0,0,0);}50%{transform:translate3d(18px,-22px,0);}}
 @keyframes floatB{0%,100%{transform:translate3d(0,0,0);}50%{transform:translate3d(-14px,20px,0);}}
 @keyframes floatC{0%,100%{transform:translate3d(0,0,0);}50%{transform:translate3d(10px,-18px,0);}}
@@ -220,7 +221,7 @@ body.night .parchment-page{background-color:#E8C99A;filter:brightness(0.78) sepi
 .chapter-toggle-btn{font-family:'Crimson Pro',serif;font-style:italic;font-size:13px;color:rgba(37,16,6,0.38);cursor:pointer;padding:2px 6px;}
 
 /* ── PAGE TEXT ── */
-.page-text{font-family:'Crimson Pro',serif;font-size:var(--rfont,18px);line-height:1.88;color:var(--ink);text-align:justify;hyphens:auto;}
+.page-text{font-family:var(--read-font,'Crimson Pro',Georgia,serif);font-size:var(--rfont,18px);line-height:1.88;color:var(--ink);text-align:justify;hyphens:auto;}
 .page-text p{margin-bottom:0.85em;}
 .page-text p:first-child::first-letter{float:left;font-family:'Playfair Display',serif;font-size:3.8em;line-height:0.78;padding-right:6px;padding-top:4px;color:var(--violet);font-weight:700;}
 .page-text h1,.page-text h2,.page-text h3{font-family:'Playfair Display',serif;font-weight:700;color:#3A1508;margin:1.1em 0 0.5em;font-size:1.1em;}
@@ -268,6 +269,65 @@ body.night .parchment-page{background-color:#E8C99A;filter:brightness(0.78) sepi
 .loading-text{font-family:'Dancing Script',cursive;font-size:20px;color:rgba(200,168,232,0.65);}
 .toast{position:fixed;bottom:calc(var(--safe-bot)+78px);left:50%;transform:translateX(-50%) translateY(12px);background:linear-gradient(135deg,#221038,#150924);border:1px solid rgba(216,138,170,0.3);border-radius:24px;color:var(--blush);font-family:'Dancing Script',cursive;font-size:17px;padding:10px 22px;opacity:0;transition:all 0.3s;z-index:300;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ═══════════════════════════════
+   THEME PICKER
+═══════════════════════════════ */
+.theme-sheet{position:fixed;bottom:0;left:0;right:0;z-index:51;background:linear-gradient(160deg,#221038,#150924);border-radius:24px 24px 0 0;border-top:1px solid rgba(200,168,232,0.15);padding:0 20px calc(var(--safe-bot)+24px);transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -20px 60px rgba(0,0,0,0.6);}
+.theme-sheet.open{transform:translateY(0);}
+.theme-sheet::before{content:'';display:block;height:2px;margin:0 -20px 20px;background:linear-gradient(to right,transparent,var(--mauve),var(--blush),var(--rose),var(--mauve),transparent);}
+.theme-handle{width:36px;height:4px;background:rgba(200,168,232,0.22);border-radius:2px;margin:12px auto 20px;}
+.theme-sheet-title{font-family:'Cinzel Decorative',serif;font-size:12px;letter-spacing:2px;color:var(--lilac);margin-bottom:20px;}
+.theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:8px;}
+.theme-card{border-radius:16px;padding:16px;border:2px solid transparent;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.theme-card.active{border-color:rgba(255,255,255,0.4);}
+.theme-card:active{transform:scale(0.96);}
+.theme-card-bg{position:absolute;inset:0;opacity:0.85;}
+.theme-card-content{position:relative;z-index:1;}
+.theme-card-name{font-family:'Cinzel Decorative',serif;font-size:10px;letter-spacing:1px;margin-bottom:4px;}
+.theme-card-sub{font-family:'Dancing Script',cursive;font-size:13px;opacity:0.7;}
+.theme-swatches{display:flex;gap:4px;margin-top:8px;}
+.theme-swatch{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);}
+.theme-tick{position:absolute;top:10px;right:10px;font-size:14px;opacity:0;}
+.theme-card.active .theme-tick{opacity:1;}
+
+/* ═══════════════════════════════
+   FONT PICKER
+═══════════════════════════════ */
+.font-sheet{position:fixed;bottom:0;left:0;right:0;z-index:51;background:linear-gradient(160deg,#221038,#150924);border-radius:24px 24px 0 0;border-top:1px solid rgba(200,168,232,0.15);padding:0 20px calc(var(--safe-bot)+24px);transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -20px 60px rgba(0,0,0,0.6);}
+.font-sheet.open{transform:translateY(0);}
+.font-sheet::before{content:'';display:block;height:2px;margin:0 -20px 20px;background:linear-gradient(to right,transparent,var(--mauve),var(--blush),var(--rose),var(--mauve),transparent);}
+.font-sheet-title{font-family:'Cinzel Decorative',serif;font-size:12px;letter-spacing:2px;color:var(--lilac);margin:0 0 16px;}
+.font-options{display:flex;flex-direction:column;gap:10px;}
+.font-option{padding:14px 18px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,168,232,0.1);cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all 0.18s;}
+.font-option:active{background:rgba(92,45,138,0.25);}
+.font-option.active{background:rgba(92,45,138,0.2);border-color:rgba(216,138,170,0.4);}
+.font-option-name{font-size:18px;color:var(--lilac);}
+.font-option-preview{font-size:12px;color:rgba(200,168,232,0.45);margin-top:2px;}
+.font-option-tick{color:var(--rose);font-size:14px;opacity:0;}
+.font-option.active .font-option-tick{opacity:1;}
+
+/* ═══════════════════════════════
+   SERIES GROUPING
+═══════════════════════════════ */
+.series-group{grid-column:1/-1;}
+.series-header{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 10px;cursor:pointer;}
+.series-name{font-family:'Cinzel Decorative',serif;font-size:10px;letter-spacing:1.5px;color:var(--rose);display:flex;align-items:center;gap:6px;}
+.series-name::before{content:'';display:block;width:20px;height:1px;background:var(--rose);opacity:0.5;}
+.series-name::after{content:'';display:block;flex:1;height:1px;background:linear-gradient(to right,rgba(216,138,170,0.3),transparent);}
+.series-count{font-family:'Dancing Script',cursive;font-size:12px;color:rgba(200,168,232,0.4);}
+.series-books{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 14px;}
+.series-books.collapsed{display:none;}
+
+/* Series tag on book meta */
+.book-meta-series{font-family:'Cinzel Decorative',serif;font-size:8px;letter-spacing:1px;color:rgba(216,138,170,0.6);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* Edit series sheet */
+.edit-sheet{position:fixed;bottom:0;left:0;right:0;z-index:51;background:linear-gradient(160deg,#221038,#150924);border-radius:24px 24px 0 0;border-top:1px solid rgba(200,168,232,0.15);padding:0 20px calc(var(--safe-bot)+24px);transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -20px 60px rgba(0,0,0,0.6);}
+.edit-sheet.open{transform:translateY(0);}
+.edit-sheet::before{content:'';display:block;height:2px;margin:0 -20px 20px;background:linear-gradient(to right,transparent,var(--mauve),var(--blush),var(--rose),var(--mauve),transparent);}
+.edit-sheet-title{font-family:'Cinzel Decorative',serif;font-size:12px;letter-spacing:2px;color:var(--lilac);margin-bottom:4px;}
+.edit-sheet-sub{font-family:'Dancing Script',cursive;font-size:14px;color:rgba(216,138,170,0.55);margin-bottom:18px;}
 </style>
 </head>
 <body>
@@ -288,6 +348,7 @@ body.night .parchment-page{background-color:#E8C99A;filter:brightness(0.78) sepi
     <div class="lib-header-row">
       <div><div class="lib-eyebrow">✦ a world of stories ✦</div><div class="lib-name">Dulce's Library</div></div>
       <div class="lib-actions">
+        <button class="icon-btn" id="theme-btn" title="Change theme">🎨</button>
         <button class="icon-btn" id="passages-lib-btn" title="Saved passages">❤️</button>
         <button class="add-fab" id="add-fab">＋</button>
       </div>
@@ -319,6 +380,7 @@ body.night .parchment-page{background-color:#E8C99A;filter:brightness(0.78) sepi
     <div class="font-controls">
       <button class="font-btn small" onclick="changeFontSize(-1)">A</button>
       <button class="font-btn large" onclick="changeFontSize(1)">A</button>
+      <button class="font-btn" style="font-size:10px;width:32px;letter-spacing:0;" id="font-pick-btn" onclick="openFontSheet()">Aa</button>
     </div>
   </header>
 
@@ -389,6 +451,36 @@ body.night .parchment-page{background-color:#E8C99A;filter:brightness(0.78) sepi
   <div class="sheet-msg" id="sheet-msg"></div>
 </div>
 
+<!-- ════════ THEME SHEET ════════ -->
+<div class="sheet-overlay" id="theme-overlay"></div>
+<div class="theme-sheet" id="theme-sheet">
+  <div class="theme-handle"></div>
+  <div class="theme-sheet-title">CHOOSE YOUR VIBE ✦</div>
+  <div class="theme-grid" id="theme-grid"></div>
+</div>
+
+<!-- ════════ FONT SHEET ════════ -->
+<div class="sheet-overlay" id="font-overlay"></div>
+<div class="font-sheet" id="font-sheet">
+  <div class="theme-handle"></div>
+  <div class="font-sheet-title">READING FONT ✦</div>
+  <div class="font-options" id="font-options"></div>
+</div>
+
+<!-- ════════ EDIT SERIES SHEET ════════ -->
+<div class="sheet-overlay" id="edit-overlay"></div>
+<div class="edit-sheet" id="edit-sheet">
+  <div class="theme-handle"></div>
+  <div class="edit-sheet-title">BOOK DETAILS</div>
+  <div class="edit-sheet-sub" id="edit-book-name">—</div>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <input class="sheet-input" id="series-input" type="text" placeholder="Series name (e.g. A Court of Thorns and Roses)">
+    <input class="sheet-input" id="series-order-input" type="number" placeholder="Book number in series (1, 2, 3…)" min="1" style="user-select:text;-webkit-user-select:text;">
+    <button class="sheet-submit" onclick="saveSeriesEdit()">SAVE ✦</button>
+    <button class="sheet-submit" style="background:rgba(180,50,50,0.2);border-color:rgba(220,80,80,0.3);" onclick="clearSeries()">REMOVE FROM SERIES</button>
+  </div>
+</div>
+
 <script>
 // ══ SAFE AREA FIX — ensure status bar is always cleared ══
 (function(){
@@ -447,72 +539,74 @@ function renderLibrary(){
   if(libTab==='pinned')books=library.filter(b=>b.pinned);
   else if(libTab==='fav')books=library.filter(b=>b.favorited);
   if(!books.length){
-    const m={all:['🌸','Your library awaits, Dulce','Tap ＋ to add your first book'],pinned:['📌','No pinned books','Long-press the 📌 button on a cover'],fav:['❤️','No favourites yet','Tap the ❤️ button on a cover']}[libTab];
+    const m={all:['🌸','Your library awaits, Dulce','Tap ＋ to add your first book'],pinned:['📌','No pinned books','Tap 📌 on a cover to pin'],fav:['❤️','No favourites yet','Tap ❤️ on a cover to favourite']}[libTab];
     grid.innerHTML=`<div class="empty-state"><div class="empty-icon">${m[0]}</div><div class="empty-h">${m[1]}</div><div class="empty-p">${m[2]}</div></div>`;
     return;
   }
-  books.forEach((book,i)=>{
+
+  // Split into series groups and standalone
+  const seriesMap={};const standalone=[];
+  books.forEach(book=>{
+    if(book.series){
+      if(!seriesMap[book.series])seriesMap[book.series]=[];
+      seriesMap[book.series].push(book);
+    }else standalone.push(book);
+  });
+  // Sort books within each series by seriesOrder then addedAt
+  Object.values(seriesMap).forEach(arr=>arr.sort((a,b)=>(a.seriesOrder||99)-(b.seriesOrder||99)||(a.addedAt-b.addedAt)));
+
+  let cardIdx=0;
+  const makeCard=(book)=>{
     const card=document.createElement('div');
     card.className='book-card';
-    card.style.animationDelay=`${i*0.07}s`;
-
-    // Cover
+    card.style.animationDelay=`${cardIdx*0.06}s`;cardIdx++;
     const coverWrap=document.createElement('div');
     coverWrap.className='book-cover-wrap';
     coverWrap.innerHTML=book.coverUrl
       ?`<img class="book-cover-img" src="${book.coverUrl}" alt="${esc(book.title)}">`
       :`<div class="book-cover-placeholder"><div class="ph-icon">${book.type==='pdf'?'📄':'📖'}</div><div class="ph-title">${esc(book.title)}</div><div class="ph-author">${esc(book.author)}</div></div>`;
     if(book.type==='pdf')coverWrap.insertAdjacentHTML('beforeend','<div class="pdf-badge">PDF</div>');
-
-    // ── Three action buttons always visible on cover ──
-    // 📌 top-left
     const pinBtn=document.createElement('button');
-    pinBtn.className='cover-btn cb-pin'+(book.pinned?' on':'');
-    pinBtn.textContent='📌';
-    pinBtn.title=book.pinned?'Unpin':'Pin';
-    pinBtn.addEventListener('click',async e=>{
-      e.stopPropagation();
-      book.pinned=!book.pinned;
-      await dbPut(book);library=await dbGetAll();renderLibrary();
-      showToast(book.pinned?'📌 Pinned!':'Unpinned');
-    });
-    // ❤️ top-right
+    pinBtn.className='cover-btn cb-pin'+(book.pinned?' on':'');pinBtn.textContent='📌';
+    pinBtn.addEventListener('click',async e=>{e.stopPropagation();book.pinned=!book.pinned;await dbPut(book);library=await dbGetAll();renderLibrary();showToast(book.pinned?'📌 Pinned!':'Unpinned');});
     const favBtn=document.createElement('button');
-    favBtn.className='cover-btn cb-fav'+(book.favorited?' on':'');
-    favBtn.textContent='❤️';
-    favBtn.title=book.favorited?'Unfavourite':'Favourite';
-    favBtn.addEventListener('click',async e=>{
-      e.stopPropagation();
-      book.favorited=!book.favorited;
-      await dbPut(book);library=await dbGetAll();renderLibrary();
-      showToast(book.favorited?'❤️ Favourited!':'Removed from favourites');
-    });
-    // ✕ bottom-right
+    favBtn.className='cover-btn cb-fav'+(book.favorited?' on':'');favBtn.textContent='❤️';
+    favBtn.addEventListener('click',async e=>{e.stopPropagation();book.favorited=!book.favorited;await dbPut(book);library=await dbGetAll();renderLibrary();showToast(book.favorited?'❤️ Favourited!':'Removed from favourites');});
     const delBtn=document.createElement('button');
-    delBtn.className='cover-btn cb-del';
-    delBtn.textContent='✕';
-    delBtn.title='Remove book';
-    delBtn.addEventListener('click',async e=>{
-      e.stopPropagation();
-      if(!confirm(`Remove "${book.title}"?`))return;
-      await dbDelete(book.id);library=library.filter(b=>b.id!==book.id);renderLibrary();
-    });
-
-    coverWrap.appendChild(pinBtn);
-    coverWrap.appendChild(favBtn);
-    coverWrap.appendChild(delBtn);
-
-    // Tap cover = open book
+    delBtn.className='cover-btn cb-del';delBtn.textContent='✕';
+    delBtn.addEventListener('click',async e=>{e.stopPropagation();if(!confirm(`Remove "${book.title}"?`))return;await dbDelete(book.id);library=library.filter(b=>b.id!==book.id);renderLibrary();});
+    coverWrap.appendChild(pinBtn);coverWrap.appendChild(favBtn);coverWrap.appendChild(delBtn);
     coverWrap.addEventListener('click',()=>openBook(book.id));
-
-    // Meta
     const meta=document.createElement('div');
     meta.className='book-meta';
-    meta.innerHTML=`<div class="book-meta-title">${esc(book.title)}</div><div class="book-meta-author">${esc(book.author)}</div>`;
+    meta.style.cursor='pointer';
+    meta.title='Tap to edit series';
+    meta.innerHTML=`<div class="book-meta-title">${esc(book.title)}</div><div class="book-meta-author">${esc(book.author)}</div>${book.series?`<div class="book-meta-series">📚 ${esc(book.series)}${book.seriesOrder?' #'+book.seriesOrder:''}</div>`:'<div class="book-meta-series" style="opacity:0.35">tap to add series</div>'}`;
+    meta.addEventListener('click',()=>openEditSheet(book));
+    card.appendChild(coverWrap);card.appendChild(meta);
+    return card;
+  };
 
-    card.appendChild(coverWrap);
-    card.appendChild(meta);
-    grid.appendChild(card);
+  // Render series groups first
+  Object.entries(seriesMap).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([seriesName,sBooks])=>{
+    const group=document.createElement('div');group.className='series-group';
+    const header=document.createElement('div');header.className='series-header';
+    let collapsed=false;
+    header.innerHTML=`<span class="series-name">${esc(seriesName)}</span><span class="series-count">${sBooks.length} book${sBooks.length>1?'s':''} ▾</span>`;
+    const booksWrap=document.createElement('div');booksWrap.className='series-books';
+    sBooks.forEach(b=>booksWrap.appendChild(makeCard(b)));
+    header.addEventListener('click',()=>{
+      collapsed=!collapsed;booksWrap.classList.toggle('collapsed',collapsed);
+      header.querySelector('.series-count').textContent=`${sBooks.length} book${sBooks.length>1?'s':''} ${collapsed?'▸':'▾'}`;
+    });
+    group.appendChild(header);group.appendChild(booksWrap);
+    grid.appendChild(group);
+  });
+
+  // Render standalone books
+  standalone.forEach(book=>{
+    const delay=cardIdx;
+    grid.appendChild(makeCard(book));
   });
 }
 
@@ -941,6 +1035,161 @@ function changeFontSize(d){
   renderPage(false);updateScrollInd();
 }
 
+// ══════════════════════════════════════════════════
+// THEMES
+// ══════════════════════════════════════════════════
+const THEMES={
+  purple:{
+    name:'Purple Dream',sub:'romantic & mystical',
+    vars:{'--deep':'#0D0618','--plum':'#1A0830','--violet':'#5C2D8A','--lilac':'#C8A8E8','--blush':'#F0B8D0','--rose':'#D88AAA','--mauve':'#B878C0','--parch':'#F3E2C4','--ink':'#251006','--orb1-bg':'rgba(92,45,138,0.22)','--orb2-bg':'rgba(216,138,170,0.16)','--orb3-bg':'rgba(139,92,200,0.13)'},
+    swatches:['#0D0618','#5C2D8A','#C8A8E8','#F0B8D0'],
+    cardBg:'linear-gradient(135deg,#1A0830,#0D0618)',cardColor:'#C8A8E8'
+  },
+  academia:{
+    name:'Dark Academia',sub:'mysterious & scholarly',
+    vars:{'--deep':'#100C04','--plum':'#1E1608','--violet':'#7A5C10','--lilac':'#D4B483','--blush':'#E8D4A8','--rose':'#C49040','--mauve':'#A07840','--parch':'#F2E8C8','--ink':'#180E04','--orb1-bg':'rgba(122,92,16,0.22)','--orb2-bg':'rgba(196,144,64,0.16)','--orb3-bg':'rgba(160,120,64,0.13)'},
+    swatches:['#100C04','#7A5C10','#D4B483','#E8D4A8'],
+    cardBg:'linear-gradient(135deg,#2C1F0A,#100C04)',cardColor:'#D4B483'
+  },
+  cottage:{
+    name:'Cottagecore',sub:'soft & enchanted',
+    vars:{'--deep':'#081008','--plum':'#102010','--violet':'#3A6830','--lilac':'#9EC890','--blush':'#C8E8B8','--rose':'#78A868','--mauve':'#5A9050','--parch':'#F0EED8','--ink':'#081408','--orb1-bg':'rgba(58,104,48,0.22)','--orb2-bg':'rgba(120,168,104,0.16)','--orb3-bg':'rgba(90,144,80,0.13)'},
+    swatches:['#081008','#3A6830','#9EC890','#C8E8B8'],
+    cardBg:'linear-gradient(135deg,#102010,#081008)',cardColor:'#9EC890'
+  },
+  midnight:{
+    name:'Midnight Blue',sub:'cool & cinematic',
+    vars:{'--deep':'#00000C','--plum':'#08081C','--violet':'#282878','--lilac':'#8888D0','--blush':'#B8B8E8','--rose':'#7878C0','--mauve':'#5858A8','--parch':'#E8E8F8','--ink':'#080818','--orb1-bg':'rgba(40,40,120,0.22)','--orb2-bg':'rgba(120,120,192,0.16)','--orb3-bg':'rgba(88,88,168,0.13)'},
+    swatches:['#00000C','#282878','#8888D0','#B8B8E8'],
+    cardBg:'linear-gradient(135deg,#08081C,#00000C)',cardColor:'#8888D0'
+  }
+};
+
+let currentTheme=localStorage.getItem('theme')||'purple';
+
+function applyTheme(key){
+  currentTheme=key;
+  const t=THEMES[key];
+  Object.entries(t.vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
+  localStorage.setItem('theme',key);
+  renderThemeGrid();
+}
+
+function openThemeSheet(){
+  renderThemeGrid();
+  document.getElementById('theme-overlay').classList.add('open');
+  document.getElementById('theme-sheet').classList.add('open');
+}
+function closeThemeSheet(){
+  document.getElementById('theme-overlay').classList.remove('open');
+  document.getElementById('theme-sheet').classList.remove('open');
+}
+document.getElementById('theme-btn').addEventListener('click',openThemeSheet);
+document.getElementById('theme-overlay').addEventListener('click',closeThemeSheet);
+
+function renderThemeGrid(){
+  const grid=document.getElementById('theme-grid');grid.innerHTML='';
+  Object.entries(THEMES).forEach(([key,t])=>{
+    const card=document.createElement('div');
+    card.className='theme-card'+(key===currentTheme?' active':'');
+    card.style.background=t.cardBg;
+    card.innerHTML=`
+      <div class="theme-card-content">
+        <div class="theme-card-name" style="color:${t.cardColor}">${t.name}</div>
+        <div class="theme-card-sub" style="color:${t.cardColor}">${t.sub}</div>
+        <div class="theme-swatches">${t.swatches.map(c=>`<div class="theme-swatch" style="background:${c}"></div>`).join('')}</div>
+      </div>
+      <div class="theme-tick">✓</div>`;
+    card.addEventListener('click',()=>{applyTheme(key);closeThemeSheet();showToast('Theme updated ✨');});
+    grid.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════════════
+// FONTS
+// ══════════════════════════════════════════════════
+const FONT_OPTIONS=[
+  {key:'crimson',name:'Crimson Pro',css:"'Crimson Pro',Georgia,serif",preview:'A classic serif, warm and readable'},
+  {key:'playfair',name:'Playfair Display',css:"'Playfair Display',Georgia,serif",preview:'Elegant & literary'},
+  {key:'georgia',name:'Georgia',css:"Georgia,serif",preview:'Timeless and familiar'},
+  {key:'sans',name:'Modern',css:"system-ui,-apple-system,BlinkMacSystemFont,sans-serif",preview:'Clean and contemporary'}
+];
+let currentFont=localStorage.getItem('readFont')||'crimson';
+
+function applyFont(key){
+  currentFont=key;
+  const f=FONT_OPTIONS.find(o=>o.key===key);
+  document.documentElement.style.setProperty('--read-font',f.css);
+  localStorage.setItem('readFont',key);
+  renderFontOptions();
+  if(chapters.length)renderPage(false);
+}
+
+function openFontSheet(){
+  renderFontOptions();
+  document.getElementById('font-overlay').classList.add('open');
+  document.getElementById('font-sheet').classList.add('open');
+}
+function closeFontSheet(){
+  document.getElementById('font-overlay').classList.remove('open');
+  document.getElementById('font-sheet').classList.remove('open');
+}
+document.getElementById('font-overlay').addEventListener('click',closeFontSheet);
+
+function renderFontOptions(){
+  const wrap=document.getElementById('font-options');wrap.innerHTML='';
+  FONT_OPTIONS.forEach(f=>{
+    const opt=document.createElement('div');
+    opt.className='font-option'+(f.key===currentFont?' active':'');
+    opt.innerHTML=`
+      <div>
+        <div class="font-option-name" style="font-family:${f.css}">${f.name}</div>
+        <div class="font-option-preview" style="font-family:${f.css}">${f.preview}</div>
+      </div>
+      <div class="font-option-tick">✓</div>`;
+    opt.addEventListener('click',()=>{applyFont(f.key);closeFontSheet();showToast('Font updated ✨');});
+    wrap.appendChild(opt);
+  });
+}
+
+// ══════════════════════════════════════════════════
+// SERIES
+// ══════════════════════════════════════════════════
+let editingBookId=null;
+
+function openEditSheet(book){
+  editingBookId=book.id;
+  document.getElementById('edit-book-name').textContent=book.title;
+  document.getElementById('series-input').value=book.series||'';
+  document.getElementById('series-order-input').value=book.seriesOrder||'';
+  document.getElementById('edit-overlay').classList.add('open');
+  document.getElementById('edit-sheet').classList.add('open');
+}
+function closeEditSheet(){
+  document.getElementById('edit-overlay').classList.remove('open');
+  document.getElementById('edit-sheet').classList.remove('open');
+  editingBookId=null;
+}
+document.getElementById('edit-overlay').addEventListener('click',closeEditSheet);
+
+async function saveSeriesEdit(){
+  if(!editingBookId)return;
+  const book=library.find(b=>b.id===editingBookId);if(!book)return;
+  const series=document.getElementById('series-input').value.trim();
+  const order=parseInt(document.getElementById('series-order-input').value)||null;
+  book.series=series||null;book.seriesOrder=order;
+  await dbPut(book);library=await dbGetAll();closeEditSheet();renderLibrary();
+  showToast(series?`Added to "${series}" ✨`:'Series cleared');
+}
+
+async function clearSeries(){
+  if(!editingBookId)return;
+  const book=library.find(b=>b.id===editingBookId);if(!book)return;
+  book.series=null;book.seriesOrder=null;
+  await dbPut(book);library=await dbGetAll();closeEditSheet();renderLibrary();
+  showToast('Removed from series');
+}
+
 // ══ HELPERS ══
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function showLoading(s){document.getElementById('loading').classList.toggle('show',s);}
@@ -951,6 +1200,11 @@ function blobToDataUrl(blob){return new Promise(res=>{const r=new FileReader();r
 async function init(){
   await initDB();await loadLibrary();
   document.documentElement.style.setProperty('--rfont',fontSize+'px');
+  // Apply saved theme
+  applyTheme(localStorage.getItem('theme')||'purple');
+  // Apply saved font
+  const savedFont=FONT_OPTIONS.find(f=>f.key===currentFont);
+  if(savedFont)document.documentElement.style.setProperty('--read-font',savedFont.css);
   if(localStorage.getItem('nightMode')){
     nightMode=true;
     document.body.classList.add('night');
@@ -959,20 +1213,16 @@ async function init(){
   }
   if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js').then(reg=>{
-      // Check for updates every time app is opened
       reg.update();
-      // When a new SW is waiting, activate it and reload
       reg.addEventListener('updatefound',()=>{
         const newSW=reg.installing;
         newSW.addEventListener('statechange',()=>{
           if(newSW.state==='installed'&&navigator.serviceWorker.controller){
-            // New version ready — tell it to skip waiting then reload
             newSW.postMessage({type:'SKIP_WAITING'});
           }
         });
       });
     }).catch(()=>{});
-    // Reload the page when the new SW takes control
     navigator.serviceWorker.addEventListener('controllerchange',()=>{
       window.location.reload();
     });
