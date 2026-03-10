@@ -384,8 +384,8 @@ img{display:block;}.book-cover-wrap img{pointer-events:none;}
   color:rgba(200,168,232,0.55);animation:fadeHint 3.5s ease 1.2s forwards;white-space:nowrap;}
 @keyframes fadeHint{0%{opacity:0;}12%{opacity:1;}70%{opacity:1;}100%{opacity:0;}}
 .progress-bar{position:absolute;bottom:0;left:0;right:0;z-index:10;
-  padding:10px 16px calc(var(--safe-bot)+6px);
-  background:linear-gradient(to top,rgba(13,6,24,0.55) 0%,rgba(13,6,24,0.2) 60%,transparent 100%);
+  padding:8px 16px calc(var(--safe-bot)+6px);
+  background:none;
   display:flex;align-items:flex-end;justify-content:space-between;
   transition:transform 0.38s ease,opacity 0.38s ease;}
 .progress-bar.hidden{transform:translateY(100%);opacity:0;pointer-events:none;}
@@ -416,10 +416,10 @@ img{display:block;}.book-cover-wrap img{pointer-events:none;}
 <body>
 <div class="app-bg"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
 <div id="stars-container"></div>
-<svg class="corner tl" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M8 112 Q8 8 112 8" stroke="#B878C0" stroke-width="1.2" fill="none"/><path d="M20 112 Q20 20 112 20" stroke="#D88AAA" stroke-width="0.7" fill="none" opacity="0.6"/><circle cx="8" cy="8" r="3.5" fill="#B878C0" opacity="0.6"/><path d="M35 8 Q42 2 49 8 Q42 14 35 8Z" fill="#B878C0" opacity="0.4"/><path d="M8 35 Q2 42 8 49 Q14 42 8 35Z" fill="#D88AAA" opacity="0.4"/></svg>
-<svg class="corner tr" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M8 112 Q8 8 112 8" stroke="#B878C0" stroke-width="1.2" fill="none"/><circle cx="8" cy="8" r="3.5" fill="#B878C0" opacity="0.6"/></svg>
-<svg class="corner bl" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M8 112 Q8 8 112 8" stroke="#B878C0" stroke-width="1.2" fill="none"/><circle cx="8" cy="8" r="3.5" fill="#B878C0" opacity="0.6"/></svg>
-<svg class="corner br" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M8 112 Q8 8 112 8" stroke="#B878C0" stroke-width="1.2" fill="none"/><circle cx="8" cy="8" r="3.5" fill="#B878C0" opacity="0.6"/></svg>
+<svg class="corner tl" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M8 112 Q8 8 112 8" style="stroke:var(--mauve)" stroke-width="1.2" fill="none"/><path d="M20 112 Q20 20 112 20" style="stroke:var(--rose)" stroke-width="0.7" fill="none" opacity="0.6"/><circle cx="8" cy="8" r="3.5" style="fill:var(--mauve)" opacity="0.6"/><path d="M35 8 Q42 2 49 8 Q42 14 35 8Z" style="fill:var(--mauve)" opacity="0.4"/><path d="M8 35 Q2 42 8 49 Q14 42 8 35Z" style="fill:var(--rose)" opacity="0.4"/></svg>
+<svg class="corner tr" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M8 112 Q8 8 112 8" style="stroke:var(--mauve)" stroke-width="1.2" fill="none"/><circle cx="8" cy="8" r="3.5" style="fill:var(--mauve)" opacity="0.6"/></svg>
+<svg class="corner bl" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M8 112 Q8 8 112 8" style="stroke:var(--mauve)" stroke-width="1.2" fill="none"/><circle cx="8" cy="8" r="3.5" style="fill:var(--mauve)" opacity="0.6"/></svg>
+<svg class="corner br" width="120" height="120" viewBox="0 0 120 120" fill="none"><path d="M8 112 Q8 8 112 8" style="stroke:var(--mauve)" stroke-width="1.2" fill="none"/><circle cx="8" cy="8" r="3.5" style="fill:var(--mauve)" opacity="0.6"/></svg>
 
 <div class="loading-overlay" id="loading"><div class="spinner"></div><div class="loading-text">Opening your book ✨</div></div>
 <div class="toast" id="toast"></div>
@@ -812,7 +812,7 @@ function renderThemeGrid(){
 }
 
 // ══ FONTS ══
-const FONTS=[{key:'crimson',name:'Crimson Pro',css:"'Crimson Pro',Georgia,serif",preview:'Warm and readable'},{key:'playfair',name:'Playfair Display',css:"'Playfair Display',Georgia,serif",preview:'Elegant & literary'},{key:'georgia',name:'Georgia',css:'Georgia,serif',preview:'Timeless and familiar'},{key:'sans',name:'Modern',css:'system-ui,-apple-system,sans-serif',preview:'Clean and contemporary'}];
+const FONTS=[{key:'crimson',name:'Crimson Pro',css:"'Crimson Pro',Georgia,serif",preview:'Warm and readable'},{key:'playfair',name:'Playfair Display',css:"'Playfair Display',Georgia,serif",preview:'Elegant & literary'},{key:'audela',name:'Audela',css:"'Audela','Cormorant Garamond','Palatino Linotype',Palatino,serif",preview:'Refined & graceful'},{key:'helvetica',name:'Helvetica',css:"'Helvetica Neue',Helvetica,Arial,sans-serif",preview:'Clean and crisp'}];
 let currentFont=localStorage.getItem('readFont')||'crimson';
 function applyFont(key){currentFont=key;const f=FONTS.find(o=>o.key===key);document.documentElement.style.setProperty('--read-font',f.css);localStorage.setItem('readFont',key);if(chapters.length)renderPage(false);}
 
@@ -821,7 +821,7 @@ function openSheet(){document.getElementById('sheet-overlay').classList.add('ope
 function closeSheet(){document.getElementById('sheet-overlay').classList.remove('open');document.getElementById('bottom-sheet').classList.remove('open');}
 document.getElementById('add-fab').addEventListener('click',openSheet);
 document.getElementById('sheet-overlay').addEventListener('click',closeSheet);
-document.getElementById('passages-lib-btn').addEventListener('click',()=>openPanel('passages'));
+document.getElementById('passages-lib-btn').addEventListener('click',()=>openPanel('passages',true));
 function switchTab(tab,btn){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('tab-'+tab).classList.add('active');}
 const dz=document.getElementById('drop-zone');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
@@ -1013,8 +1013,24 @@ function selSave(){
 }
 
 // ══ SIDE PANEL ══
-function openPanel(tab){if(tab){panelTab=tab;document.querySelectorAll('.panel-tab').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes(tab.substring(0,4))));} document.getElementById('panel-overlay').classList.add('open');document.getElementById('side-panel').classList.add('open');renderPanelContent();}
-function closePanel(){document.getElementById('panel-overlay').classList.remove('open');document.getElementById('side-panel').classList.remove('open');}
+let panelLibMode=false;
+function openPanel(tab,libMode){
+  panelLibMode=!!libMode;
+  if(tab){
+    panelTab=tab;
+    document.querySelectorAll('.panel-tab').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes(tab.substring(0,4))));
+  }
+  // Show/hide settings tab depending on context
+  document.querySelectorAll('.panel-tab').forEach(b=>{
+    if(b.textContent.includes('SETTINGS'))b.style.display=panelLibMode?'none':'';
+  });
+  // If lib mode and currently on settings, switch to passages
+  if(panelLibMode&&panelTab==='settings'){panelTab='passages';document.querySelectorAll('.panel-tab').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes('pass')));}
+  document.getElementById('panel-overlay').classList.add('open');
+  document.getElementById('side-panel').classList.add('open');
+  renderPanelContent();
+}
+function closePanel(){document.getElementById('panel-overlay').classList.remove('open');document.getElementById('side-panel').classList.remove('open');document.querySelectorAll('.panel-tab').forEach(b=>b.style.display='');panelLibMode=false;}
 document.getElementById('panel-overlay').addEventListener('click',closePanel);
 document.getElementById('panel-btn').addEventListener('click',()=>openPanel());
 function setPanelTab(tab,btn){panelTab=tab;document.querySelectorAll('.panel-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPanelContent();}
