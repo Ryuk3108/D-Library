@@ -11,7 +11,7 @@
 <title>Dulce's Library</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Dancing+Script:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
@@ -812,7 +812,7 @@ function renderThemeGrid(){
 }
 
 // ══ FONTS ══
-const FONTS=[{key:'crimson',name:'Crimson Pro',css:"'Crimson Pro',Georgia,serif",preview:'Warm and readable'},{key:'playfair',name:'Playfair Display',css:"'Playfair Display',Georgia,serif",preview:'Elegant & literary'},{key:'audela',name:'Audela',css:"'Audela','Cormorant Garamond','Palatino Linotype',Palatino,serif",preview:'Refined & graceful'},{key:'helvetica',name:'Helvetica',css:"'Helvetica Neue',Helvetica,Arial,sans-serif",preview:'Clean and crisp'}];
+const FONTS=[{key:'crimson',name:'Crimson Pro',css:"'Crimson Pro',Georgia,serif",preview:'Warm and readable'},{key:'playfair',name:'Playfair Display',css:"'Playfair Display',Georgia,serif",preview:'Elegant & literary'},{key:'cormorant',name:'Cormorant Garamond',css:"'Cormorant Garamond',Georgia,serif",preview:'Refined & graceful'},{key:'dmsans',name:'DM Sans',css:"'DM Sans',Arial,sans-serif",preview:'Clean and crisp'}];
 let currentFont=localStorage.getItem('readFont')||'crimson';
 function applyFont(key){currentFont=key;const f=FONTS.find(o=>o.key===key);document.documentElement.style.setProperty('--read-font',f.css);localStorage.setItem('readFont',key);if(chapters.length)renderPage(false);}
 
