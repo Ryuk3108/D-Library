@@ -384,8 +384,8 @@ img{display:block;}.book-cover-wrap img{pointer-events:none;}
   color:rgba(200,168,232,0.55);animation:fadeHint 3.5s ease 1.2s forwards;white-space:nowrap;}
 @keyframes fadeHint{0%{opacity:0;}12%{opacity:1;}70%{opacity:1;}100%{opacity:0;}}
 .progress-bar{position:absolute;bottom:0;left:0;right:0;z-index:10;
-  padding:14px 16px calc(var(--safe-bot)+8px);
-  background:linear-gradient(to top,rgba(13,6,24,0.97),transparent);
+  padding:10px 16px calc(var(--safe-bot)+6px);
+  background:linear-gradient(to top,rgba(13,6,24,0.55) 0%,rgba(13,6,24,0.2) 60%,transparent 100%);
   display:flex;align-items:flex-end;justify-content:space-between;
   transition:transform 0.38s ease,opacity 0.38s ease;}
 .progress-bar.hidden{transform:translateY(100%);opacity:0;pointer-events:none;}
@@ -433,6 +433,7 @@ img{display:block;}.book-cover-wrap img{pointer-events:none;}
         <div class="lib-name">Dulce's Library</div>
       </div>
       <div class="lib-actions">
+        <button class="hdr-btn" id="passages-lib-btn" title="Bookmarks & passages">❤️</button>
         <button class="hdr-btn" id="dots-btn" title="More options">⋮</button>
         <button class="add-fab" id="add-fab">＋</button>
       </div>
@@ -820,6 +821,7 @@ function openSheet(){document.getElementById('sheet-overlay').classList.add('ope
 function closeSheet(){document.getElementById('sheet-overlay').classList.remove('open');document.getElementById('bottom-sheet').classList.remove('open');}
 document.getElementById('add-fab').addEventListener('click',openSheet);
 document.getElementById('sheet-overlay').addEventListener('click',closeSheet);
+document.getElementById('passages-lib-btn').addEventListener('click',()=>openPanel('passages'));
 function switchTab(tab,btn){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('tab-'+tab).classList.add('active');}
 const dz=document.getElementById('drop-zone');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
