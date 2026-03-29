@@ -26,6 +26,7 @@
 html{height:100%;height:-webkit-fill-available;}
 body{font-family:'Crimson Pro',Georgia,serif;color:var(--lilac);overscroll-behavior:none;
   min-height:100dvh;overflow:hidden;background:var(--deep);position:fixed;width:100%;}
+body.reader-open{background:var(--parch);}
 body.night-app{filter:brightness(0.82) sepia(0.12);}
 button{cursor:pointer;border:none;background:none;font-family:inherit;}
 img{display:block;}.book-cover-wrap img{pointer-events:none;}
@@ -765,13 +766,14 @@ async function openBook(id){
     buildChapterDD();loadChapter(chIdx,false);
     document.getElementById('lib-screen').classList.remove('active');
     document.getElementById('reader-screen').classList.add('active');
+    document.body.classList.add('reader-open');
     showLoading(false);showControls();autoHideControls();
     const sh=document.getElementById('swipe-hint');
     sh.style.display=localStorage.getItem('hint_shown')?'none':'flex';
     if(!localStorage.getItem('hint_shown'))localStorage.setItem('hint_shown','1');
   }catch(err){showLoading(false);showToast('Could not open book');console.error(err);}
 }
-document.getElementById('back-btn').addEventListener('click',()=>{window.getSelection()?.removeAllRanges();document.getElementById('reader-screen').classList.remove('active');document.getElementById('lib-screen').classList.add('active');});
+document.getElementById('back-btn').addEventListener('click',()=>{window.getSelection()?.removeAllRanges();document.getElementById('reader-screen').classList.remove('active');document.getElementById('lib-screen').classList.add('active');document.body.classList.remove('reader-open');});
 
 // CHAPTER DD
 function buildChapterDD(){const dd=document.getElementById('chapter-dropdown');dd.innerHTML='';chapters.forEach((ch,i)=>{const opt=document.createElement('div');opt.className='chapter-opt'+(i===chIdx?' active':'');opt.textContent=ch.name;opt.addEventListener('click',()=>{chIdx=i;pageIdx=0;loadChapter(chIdx,false);closeChapterDD();});dd.appendChild(opt);});}
