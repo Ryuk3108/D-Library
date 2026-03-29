@@ -25,7 +25,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{height:100%;height:-webkit-fill-available;}
 body{font-family:'Crimson Pro',Georgia,serif;color:var(--lilac);overscroll-behavior:none;
-  min-height:100dvh;overflow:hidden;background:var(--deep);position:fixed;width:100%;}
+  height:100%;height:100dvh;overflow:hidden;background:var(--deep);position:fixed;width:100%;}
 body.reader-open{background:var(--parch);}
 body.night-app{filter:brightness(0.82) sepia(0.12);}
 button{cursor:pointer;border:none;background:none;font-family:inherit;}
@@ -536,10 +536,20 @@ img{display:block;}.book-cover-wrap img{pointer-events:none;}
   const envTop=probe.getBoundingClientRect().top;
   document.documentElement.removeChild(probe);
   let safeTop=envTop;
-  if(safeTop<8){const diff=window.screen.height-window.screen.availHeight;if(diff>8)safeTop=diff;}
-  if(safeTop<8&&window.visualViewport&&window.visualViewport.offsetTop>8)safeTop=window.visualViewport.offsetTop;
-  const isPhone=window.innerWidth<=430&&('ontouchstart' in window);
-  if(isPhone&&safeTop<44)safeTop=59;
+
+  // Use UserAgent for reliable iOS detection — screen width check fails on iPhone 17 (440px CSS width)
+  const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||
+               (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+
+  if(isIOS){
+    // On iOS env() should work but fallback to 64px for Dynamic Island devices (iPhone 12+)
+    if(safeTop<20)safeTop=64;
+  } else {
+    // Android: try screen geometry
+    if(safeTop<8){const diff=window.screen.height-window.screen.availHeight;if(diff>8)safeTop=diff;}
+    if(safeTop<8&&window.visualViewport&&window.visualViewport.offsetTop>8)safeTop=window.visualViewport.offsetTop;
+  }
+
   document.documentElement.style.setProperty('--safe-top',safeTop+'px');
 })();
 
