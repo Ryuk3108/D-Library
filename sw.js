@@ -1,4 +1,4 @@
-const CACHE = 'dulce-v4';
+const CACHE = 'dulce-v5';
 
 self.addEventListener('install', e => {
   // Don't skip waiting immediately — wait for SKIP_WAITING message
