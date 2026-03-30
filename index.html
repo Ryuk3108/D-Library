@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Dulce's Library">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#130920">
+<meta name="theme-color" content="#0D0618">
 <title>Dulce's Library</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -23,9 +23,10 @@
   --read-font:'Crimson Pro',Georgia,serif;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{height:100%;height:-webkit-fill-available;}
+html{height:100%;height:100svh;height:-webkit-fill-available;background:var(--deep);}
 body{font-family:'Crimson Pro',Georgia,serif;color:var(--lilac);overscroll-behavior:none;
-  min-height:100dvh;overflow:hidden;background:var(--deep);position:fixed;width:100%;}
+  min-height:100vh;min-height:100svh;height:100%;overflow:hidden;background:var(--deep);
+  position:relative;width:100%;padding-bottom:var(--safe-bot);}
 body.night-app{filter:brightness(0.82) sepia(0.12);}
 button{cursor:pointer;border:none;background:none;font-family:inherit;}
 img{display:block;}.book-cover-wrap img{pointer-events:none;}
@@ -59,7 +60,7 @@ img{display:block;}.book-cover-wrap img{pointer-events:none;}
 ══════════════════════ */
 .lib-header{
   flex-shrink:0;
-  padding:max(52px, calc(var(--safe-top) + 16px)) 16px 0;
+  padding:max(64px, calc(var(--safe-top) + 18px)) 16px 0;
   background:linear-gradient(to bottom,rgba(13,6,24,0.97),rgba(13,6,24,0.8));
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   position:relative;
@@ -530,7 +531,7 @@ img{display:block;}.book-cover-wrap img{pointer-events:none;}
       <div class="dz-icon">📖</div>
       <div class="dz-text">Tap to choose your .epub or .pdf</div>
       <div class="dz-sub">stored privately on this device</div>
-      <input type="file" accept=".epub,.pdf" id="file-input" onchange="handleFileInput(this)">
+      <input type="file" accept=".epub,application/epub+zip,.pdf,application/pdf" id="file-input" onchange="handleFileInput(this)">
     </div>
   </div>
   <div class="tab-panel" id="tab-link">
@@ -579,17 +580,20 @@ img{display:block;}.book-cover-wrap img{pointer-events:none;}
 <script>
 // ══ SAFE AREA ══
 (function(){
+  const root=document.documentElement;
+  const ua=navigator.userAgent||'';
+  const isIOS=/iPad|iPhone|iPod/.test(ua)||(/Mac/.test(ua)&&'ontouchend' in document);
+  const isStandalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  
   const el=document.createElement('div');
-  el.style.cssText='position:fixed;top:env(safe-area-inset-top,0px);left:0;width:1px;height:1px;';
+  el.style.cssText='position:fixed;top:env(safe-area-inset-top,0px);left:0;width:1px;height:1px;pointer-events:none;';
   document.body.appendChild(el);
-  const top=el.getBoundingClientRect().top;
+  const topInset=Math.max(0,Math.round(el.getBoundingClientRect().top));
   document.body.removeChild(el);
-  if(top<4){
-    const h=Math.max(44,window.screen.height-window.screen.availHeight)||44;
-    document.documentElement.style.setProperty('--safe-top',h+'px');
-  } else {
-    document.documentElement.style.setProperty('--safe-top',top+'px');
-  }
+
+  const computedTop=topInset||parseInt(getComputedStyle(root).getPropertyValue('--safe-top'),10)||0;
+  const fallbackTop=(isIOS&&isStandalone)?54:0;
+  root.style.setProperty('--safe-top',Math.max(computedTop,fallbackTop)+'px');
 })();
 
 // ══ STARS ══
@@ -875,7 +879,18 @@ async function processEpub(file,name){
 async function processPDF(file,name){
   document.getElementById('sheet-msg').textContent='Reading PDF…';showLoading(true);
   try{
-    const ab=await file.arrayBuffer();const pdf=await pdfjsLib.getDocument({data:ab.slice(0)}).promise;
+    const ua=navigator.userAgent||'';
+    const isIOS=/iPad|iPhone|iPod/.test(ua)||(/Mac/.test(ua)&&'ontouchend' in document);
+    const isStandalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+    const ab=await file.arrayBuffer();
+    let pdf;
+    try{
+      pdf=await pdfjsLib.getDocument({data:ab.slice(0)}).promise;
+    }catch(primaryErr){
+      if(!(isIOS&&isStandalone))throw primaryErr;
+      // iOS standalone can fail to spin up a PDF.js worker from CDN; fallback to main-thread parsing.
+      pdf=await pdfjsLib.getDocument({data:ab.slice(0),disableWorker:true}).promise;
+    }
     const title=(file.name||name||'Untitled').replace(/\.pdf$/i,'');
     let coverUrl=null;
     try{const p1=await pdf.getPage(1);const vp=p1.getViewport({scale:0.8});const cvs=document.createElement('canvas');cvs.width=vp.width;cvs.height=vp.height;await p1.render({canvasContext:cvs.getContext('2d'),viewport:vp}).promise;coverUrl=cvs.toDataURL('image/jpeg',0.75);}catch{}
